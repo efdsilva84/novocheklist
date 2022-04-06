@@ -31,7 +31,7 @@ export default function Atendimento({route}){
                <View style={styles.atendimento}>
                    <View style={styles.topo}>
                     <View style={styles.avatar}>
-                            <Image  />
+                            <Image   />
                     </View>
                     <View style={styles.txt}>
                     <Text style={styles.txtcnh}>CNH: {route.params.cnh}</Text>

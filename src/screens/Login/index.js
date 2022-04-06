@@ -21,7 +21,7 @@ export default ( )=>{
     const api = 'https://klrentacar.com.br/sistema/api/';
 
     
-    async function logar() {
+    async function logar({route}) {
         if(login != '' && senha != '' ){
             setLoadingAuth(true);
             let json = await Api.logar(login, senha);
@@ -30,7 +30,7 @@ export default ( )=>{
                 //const resp = await json.data;
             setDados(json);
             console.log(json);
-                   navigation.replace('Home',{usu: dados.login_usu});  
+                   navigation.replace('Home',{usu: login });  
         }else{
             mensagemDadosIncorretos();
         }
@@ -117,6 +117,7 @@ export default ( )=>{
                     <TouchableOpacity style={styles.imgbtn} onPress={kl}>
                         <Image source={require("../../assets/img/logo.png")} style={{width:'55%', height:80, paddingBottom:30, borderRadius:5}}  />
                     </TouchableOpacity>
+                 
                     <View style={styles.int}>
                         <View style={styles.usuario}>
                     </View>
@@ -144,7 +145,9 @@ export default ( )=>{
                             )
                         }
             </TouchableOpacity>
-      
+            <View style={styles.check}>
+                        <Text style={styles.checktxt}>CHECKLIST</Text>
+                    </View>
        
             </View>  
             </View>  
@@ -207,7 +210,6 @@ const styles = StyleSheet.create({
     },    
     check:{
         width:'100%',
-        height: 50,
         marginTop:20
     },
     checktxt:{
@@ -215,7 +217,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontWeight: 'bold',
-        letterSpacing:18
     },
     slide:{
         width: '100%',

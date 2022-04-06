@@ -28,18 +28,26 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
     return(
         <ScrollView style={styles.cont} showsVerticalScrollIndicator={false}>
+            <View style={styles.alinhamento}>
             <View style={styles.card}>
+              
                 <View style={styles.locacao}>
                     <Text style={styles.txtlocacao}>Locação : {data.id_Loc}</Text>
                     <TouchableOpacity style={styles.btn}>
-                         <FontAwesome name="folder-open" size={30}  width="100" color="#000"/>
+                         <FontAwesome name="folder-open" size={30}  width="100" color="#fff"/>
                     </TouchableOpacity>
+                    
                 </View>
-                <View style={styles.info}>
+                <Text style={styles.txtnome}>NOME : {data.nome_cli}</Text>
+                     <Text style={styles.txtcpf}>CPF : {data.cpf_cli}</Text>
+              
+          
+          <View style={styles.infoalinhamento}>
+          <View style={styles.info}>
                     <View style={styles.infoint}>
-                        <Text style={styles.infotxt}>Placa : {data.placa_car}</Text>
-                         <Text style={styles.infotxt}>Modelo : {data.modelo_car}</Text>
-                        <Text style={styles.infotxt}>Cor : {data.cor_car}</Text>
+                        <Text style={styles.infotxt}>PLACA : {data.placa_car}</Text>
+                         <Text style={styles.infotxt}>MODELO : {data.modelo_car}</Text>
+                        <Text style={styles.infotxt}>COR : {data.cor_car}</Text>
                     </View>
                     <View style={styles.capa}>
                         <Image source={{uri: data.foto}} style={styles.capa}/>
@@ -47,12 +55,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
               
 
                 </View>
-                <View style={styles.loja}>
-                    <Text style={styles.lojatxt}>LOJA: {data.titulo_loj}</Text>
-                </View>
-                <Text style={styles.txtnome}>Nome : {data.nome_cli}</Text>
-                <Text style={styles.txtcpf}>CPF : {data.cpf_cli}</Text>
-
+          </View>
+      
+            
+                
+                <View style={styles.botaoalinhamento}>
                 <View style={styles.btns}>
                    <TouchableOpacity style={styles.btnsaida} onPress>
                    <FontAwesome name="chevron-up" size={30}  width="100" color="#fff" style={{textAlign: 'center', padding:10}}/>
@@ -62,20 +69,33 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
                         <FontAwesome name="chevron-down" size={30}  width="100" color="#fff"  style={{textAlign: 'center', padding:10}}/>
                        <Text style={styles.textretorno}>RETORNO</Text>
                    </TouchableOpacity>
-                   <TouchableOpacity style={styles.btnatt} onPress={Atender}>
-                   <FontAwesome name="users" size={30}  width="100" color="#fff"  style={{textAlign: 'center', padding:10}}/>
+               
+
+             
+                </View>
+                <View style={styles.att}>
+                 <TouchableOpacity style={styles.btnatt} onPress={Atender}>
                        <Text style={styles.txtatendimento}>ATENDIMENTO</Text>
                    </TouchableOpacity>
-
                 </View>
+                </View>
+      
+               
 
-              
+                <View style={styles.loja}>
+                
+                        
+                    <Text style={styles.lojatxt}>LOJA: {data.titulo_loj}
+
+                    
+                    </Text>
+                </View>
           
 
             </View>
 
       
-    
+            </View>
         </ScrollView>
     );
 }
@@ -84,14 +104,26 @@ const styles = StyleSheet.create({
 
     cont:{
         width: '100%',
-        flex: 1
+        flex: 1,
+        backgroundColor: '#FFF',
     },
     card:{
-        margin: 15,
+        flex:1,
+        width: '70%',
+        justifyContent: 'center',
+        marginTop:10,
         //elevation:2,
-        borderWidth:1,
         padding:5,
         borderRadius:5,
+        borderWidth:0.5,
+        backgroundColor: '#FFF',
+    },
+    alinhamento:{
+        width:'100%',
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+
 
     },
     capa:{
@@ -100,18 +132,20 @@ const styles = StyleSheet.create({
     },
     locacao:{
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        backgroundColor:'#38a98d'
     },
     txtlocacao:{
         fontSize: 25,
         fontWeight: 'bold',
         padding:10,
-        color:'#000'
+        color:'#fff'
     },
     txtnome:{
         fontSize:18,
         color: '#000',
-        padding:10
+        padding:10,
+        fontWeight: 'bold'
     },
     txtcpf:{
         fontSize:18,
@@ -125,10 +159,22 @@ const styles = StyleSheet.create({
         marginTop:7,
 
     },
+    infoalinhamento:{
+        width:'100%',
+        flex: 1,
+        backgroundColor: '#FFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius:2,
+        marginBottom:10
+    },
     info:{
-        backgroundColor: '#eee',
+        backgroundColor: '#fff',
         flexDirection: 'row-reverse',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width:'100%',
+        borderRadius:2,
+        borderWidth:0.1
     },
     infoint:{
         backgroundColor: '#eee  ',
@@ -139,40 +185,46 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#000',
         padding:3,
-        marginTop:3
+        marginTop:3,
+        fontWeight: 'bold'
     },
     btns:{
-        backgroundColor: '#FFf',
+        backgroundColor: '#fff',
+        width:'70%',
         flexDirection: 'row',
-        height:100
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height:100,
+    
     },
     btnsaida:{
         backgroundColor: '#ff0000',
-        width: '20%',
+        width: '40%',
+        height:100,
         justifyContent: 'center',
         borderRadius:5,
-        marginRight: '5%'
     },
     txtsaida:{
         color: '#fff',
         textAlign: 'center',
-        fontSize: 18
+        fontSize: 15
     },
     btnentrada:{
         backgroundColor: '#38a98d',
-        width: '20%',
+        width: '40%',
+        height:100,
         justifyContent: 'center',
         borderRadius:5,
-        marginRight: '5%'
     },
     textretorno:{
         color: '#fff',
         textAlign: 'center',
-        fontSize: 18
+        fontSize: 15
     },
     btnatt:{
         backgroundColor: '#4169E1',
-        width: '50%', 
+        width: '100%', 
+        height:40,
         justifyContent: 'center',
         borderRadius:5
     },
@@ -182,14 +234,33 @@ const styles = StyleSheet.create({
         fontSize:18
     },
     loja:{
-        backgroundColor: '#38a98d',
+        backgroundColor: '#cfcfcf',
         marginTop:5,
-        borderRadius:3
+        borderRadius:3,
+        padding:5
     },
     lojatxt:{
-        color: '#fff',
+        color: '#666668',
         padding:5,
         textAlign: 'center'
+    },
+    botaoalinhamento:{
+        width:'100%',
+        flex:1,
+        backgroundColor:'#fff',
+        alignItems: 'center'
+    },
+    att:{
+        width:'70%',
+        height:40,
+        marginTop:10,
+        backgroundColor: '#fff'
+    },
+    torquato:{
+        color: '#D2691E'
+    },
+    pca14:{
+        color: '#ff00ff'
     }
 
 });

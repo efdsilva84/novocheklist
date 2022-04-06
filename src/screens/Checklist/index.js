@@ -27,8 +27,9 @@ function Checklist({ route }) {
     const [catalizador, setCatalizador] = useState(false);
     
     const [listaFotos, setListaFotos] = useState([
-        { title: 'fotoFrente', url: null },
-        { title: 'fotoTraseira',  url: null  }
+        { title: 'frente', url: null },
+        { title: 'lateralDireito',  url: null  },
+        { title: 'traseira',  url: null  },
     ]);
 
 
@@ -241,7 +242,7 @@ function Checklist({ route }) {
                             return (
                                 <View key={moldura.title} style={styles.foto}>
                                        
-                                    <Image style={{ borderRadius: 5, borderWidth: 0.5, borderColor: '#fff', width: 100, height: 160, }}
+                                    <Image style={{ borderRadius: 5, borderColor: '#fff', width: '100%', height: 160, }}
                                         resizeMode="contain" source={{uri:moldura.url}}
                                     />
                                     <TouchableOpacity style={styles.icone} onPress={() => {
@@ -250,6 +251,8 @@ function Checklist({ route }) {
                                         <Feather name="camera" size={25} />
                                     </TouchableOpacity>
                                 </View>)
+
+                                
 
                         })}
 
@@ -381,30 +384,29 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 3
     },
+    fotos: {
+        width: '95%',
+        marginTop: 10,
+    },
     areafoto: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
-        marginBottom: 50
+        marginBottom: 50,
+        backgroundColor: '#eee'
     },
-    fotos: {
-        width: '95%',
-        marginTop: 20,
-    },
+ 
     foto: {
-        width: '25%',
+        width: '26%',
         height: 160,
-        borderWidth: 0.3,
-        borderRadius: 1,
+        borderRadius: 0.5,
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        borderWidth:0.3
     },
-    fotos: {
-        width: '95%',
-        marginTop: 10,
-    },
+
     txtfotos: {
         padding: 5,
         fontSize: 15,

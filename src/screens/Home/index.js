@@ -93,10 +93,10 @@ function Home({route}){
 
     return(
         <View style={styles.container}>
-                <View style={styles.int}>
-                    <Text>usuario:{route.params.usu}</Text>
+            <Text>ola:{route.params.login}</Text>
+                <View style={styles.input}>
                 <TextInput 
-                    style={styles.input}
+                    style={styles.inputt}
                     placeholder="Placa do carro"
                     dataCorrect={false}
                     value={placa_car}
@@ -112,8 +112,8 @@ function Home({route}){
                                 )
                             }
                 </TouchableOpacity>
-                </View>             
-                 <View>
+        
+                <View>
                     <FlatList data={locacaoAberta}
                         renderItem={({ item}) => <Locacoes data={item}/>} 
                         keyExtractor={item => item.id_Loc} refreshing={loadingRefresh}
@@ -122,14 +122,18 @@ function Home({route}){
                 
                         
                     </View>
+                            
+
                     <FlatList data={locacao}
                     renderItem={({item}) => <Locacoes data={item} />}  
                     keyExtractor={item => item.id_Loc} 
-                    />  
+                    /> 
+       
+                </View>             
+           
+                  
 
-                      <View>
-                    <Text>Locacao:</Text>
-                </View>
+
                 
                     
                  </View>
@@ -139,22 +143,25 @@ function Home({route}){
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#fff'
-    },
-    int:{
+        backgroundColor: '#fff',
         alignItems: 'center'
     },
     input:{
-        width: '95%',
+        width: '100%',
         backgroundColor: '#fff',
-        borderWidth:1,
+        borderBottomWidth:0.7,
         borderRadius:3,
         padding:10,
         marginTop:10
 
     },
+    inputt:{
+        borderWidth:0.5,
+        borderRadius:3
+    },
+
     btn:{
-        width: '95%',
+        width: '100%',
         height:50,
         borderRadius: 3,
         backgroundColor: '#38a98d',
@@ -265,6 +272,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontSize:20
+    },
+    areaa:{
+        backgroundColor: '#836FFF'
     }
     
 })
