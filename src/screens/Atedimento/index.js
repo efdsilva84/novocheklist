@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native';
 import { Picker } from '@react-native-picker/picker'
-
+import { UserContext } from '../../contexts/user';
+import { AuthContext } from '../../contexts/auth';
 export default function Atendimento({route}){
+
+
+    const { nome, user } = useContext(AuthContext)
     const [procedimento, setProcedimento ] = useState(0);
     const [adesivo, setAdesivo ] = useState(0);
     const [ loadingAuth, setLoadingAuth] = useState(false);
@@ -37,6 +41,9 @@ export default function Atendimento({route}){
                     <Text style={styles.txtcnh}>CNH: {route.params.cnh}</Text>
                         <Text style={styles.txtcnh}>Locação: {route.params.loca}</Text>
                         <Text style={styles.txtcnh}>ID: {route.params.cliente}</Text>
+                        <Text>nome:{nome} email : {user.login}</Text>
+                        <Text>status:{user.status}</Text>
+                    
 
                     </View>
                    </View>  

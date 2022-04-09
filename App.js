@@ -7,9 +7,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../list/src/screens/Login';
 import Home from '../list/src/screens/Home';
 import Atendimento from '../list/src/screens/Atedimento';
-import Preload from './src/screens/Preload';
 import Camera from './src/screens/Camera';
 import Checklist from './src/screens/Checklist';
+import Preload from './src/screens/Preload';
+import AuthProvider from './src/contexts/auth';
 const Stack = createNativeStackNavigator();
 
 
@@ -24,9 +25,13 @@ function HomeScreen() {
 function App() {
   return (
            <NavigationContainer>
-             <StatusBar />
+             <AuthProvider>
+             <StatusBar backgroundColor="#000" barStyle='light-content' />
             <Stack.Navigator>
-          <Stack.Screen initialRouteName="Preload" name="Login" component={Login} options={{headerShown:false}}/>
+            <Stack.Screen initialRouteName="Preload"   name="Preload" component={Preload} options={{headerShown:false}}/>
+          <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
+          
+
           <Stack.Screen  name="Home" component={Home} options={{
             headerStyle:{backgroundColor: '#38a98d'},headerTintColor: '#fff', title: 'Locação KL'
           }}/>
@@ -42,7 +47,7 @@ function App() {
         </Stack.Navigator>
 
    
-
+        </AuthProvider>
     </NavigationContainer>
    
   );

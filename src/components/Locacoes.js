@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 
  function Locacoes({data}) {
     const navigation = useNavigation();
     const [ visibleModal, setVisibleModal ] = useState(false);
     const [ modalAtendimento, setModalAtendimento ] = useState(false);
+
 
  
     function Atender(){
@@ -27,9 +29,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
     return(
+
         <ScrollView style={styles.cont} showsVerticalScrollIndicator={false}>
             <View style={styles.alinhamento}>
-            <View style={styles.card}>
+                 <View style={styles.card}>
               
                 <View style={styles.locacao}>
                     <Text style={styles.txtlocacao}>Locação : {data.id_Loc}</Text>
@@ -96,7 +99,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
       
             </View>
-        </ScrollView>
+            </ScrollView>
+
     );
 }
 

@@ -12,7 +12,6 @@ import Atendimento from '../../components/Atendimento';
 //const api = 'https://klrentacar.com.br/sistema/api/';
 
 function Home({route}){
-    const navigation = useNavigation();
     const [ placa_car, setPlaca_car ] = useState('');
     const [dados, setDados ] = useState();
     const [ loadingAuth, setLoadingAuth] = useState(false);
@@ -20,17 +19,21 @@ function Home({route}){
     const [ locacao, setLocacao ] = useState([]);
     const [loadingRefresh, setLoadingRefresh] = useState(false);
 
-
-    let dadosLocacao = null;
-
-
-    function nextSaida(){
-        navigation.navigate('CheckSaida');
-    }
-    function nextAtendimento(){
-        navigation.navigate('Atendimento');
-        
-    }
+    useEffect(()=>{
+        async function locacaoDia(){
+            const config ={
+                headers: {
+                    'Content-Type': 'application/json',
+                   Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
+                    Accept: 'aplication/json'
+                }
+            }
+            const responde = await api.get('checklist/locacao_dia', config);
+            console.log(responde.data);
+            setLocacaoAberta(responde.data);
+        }
+        locacaoDia();
+    },[]);
 
     function handleRefresh(){
         async function locacaoDia(){
@@ -48,6 +51,8 @@ function Home({route}){
         locacaoDia();
     }
 
+  
+ 
 
 
 
@@ -75,25 +80,11 @@ function Home({route}){
 
 
 
-    useEffect(()=>{
-        async function locacaoDia(){
-            const config ={
-                headers: {
-                    'Content-Type': 'application/json',
-                   Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
-                    Accept: 'aplication/json'
-                }
-            }
-            const responde = await api.get('checklist/locacao_dia', config);
-            console.log(responde.data);
-            setLocacaoAberta(responde.data);
-        }
-        locacaoDia();
-    },[]);
+
 
     return(
+
         <View style={styles.container}>
-            <Text>ola:{route.params.login}</Text>
                 <View style={styles.input}>
                 <TextInput 
                     style={styles.inputt}
@@ -120,24 +111,20 @@ function Home({route}){
                         onRefresh={handleRefresh} />   
                      
                 
+
+                     <FlatList data={locacao}
+                    renderItem={({item}) => <Locacoes data={item} />}  
+                    keyExtractor={item => item.id_Loc} 
+                    /> 
                         
                     </View>
                             
 
-                    <FlatList data={locacao}
-                    renderItem={({item}) => <Locacoes data={item} />}  
-                    keyExtractor={item => item.id_Loc} 
-                    /> 
+              
        
-                </View>             
-           
-                  
-
-
-                
-                    
+                    </View>              
                  </View>
-    
+
     );
 }
 const styles = StyleSheet.create({

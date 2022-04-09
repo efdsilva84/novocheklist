@@ -1,67 +1,35 @@
 import React,{useState, useContext, Component} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Switch, Alert, ActivityIndicator} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import axios from 'axios';
 import { Input } from './styles';
-import AsyncStorage from '@react-native-community/async-storage';
 import Api from '../Api';
 import api from '../../services/api';
+import { AuthContext } from '../../contexts/auth';
+import * as Animatable from 'react-native-animatable'
+
 
 
 
 export default ( )=>{
-    const navigation = useNavigation();
-    const [ login, setLogin] = useState('');
     const [ senha, setSenha ] = useState('');
+    const [ login, setLogin] = useState('');
     const [ loadingAuth, setLoadingAuth] = useState(false);
     const [ loginkl , setloginkl ] = useState(true);
     const [ dados, setDados ] = useState('');
 
+    const { entrar } = useContext(AuthContext);
+
     const api = 'https://klrentacar.com.br/sistema/api/';
 
     
-    async function logar({route}) {
-        if(login != '' && senha != '' ){
-            setLoadingAuth(true);
-            let json = await Api.logar(login, senha);
-            setLoadingAuth(false);
-            
-                //const resp = await json.data;
-            setDados(json);
-            console.log(json);
-                   navigation.replace('Home',{usu: login });  
-        }else{
-            mensagemDadosIncorretos();
-        }
-
-     const checkLogin = async () =>{
-         const user = await AsyncStorage.getItem('@login');
-         if(user){
-             setLogin(user);
-             navigation.replace('Home');
-         }
-
-     }
-     useEffect(()=>{
-        checkLogin();
-     },[]);
-   
+    async function logar(){
+        setLoadingAuth(true);
+           entrar(login, senha);
+          // setLoadingAuth(false);
         
       }
 
-      const mensagemDadosIncorretos = () =>{
-        Alert.alert(
-          "Erro ao Logar",
-          "Email ou Senha Incorretos",
-          [
-            
-            { text: "OK"  }
-          ],
-          { cancelable: true }
-        );  
 
-      }
       function Merronit(){
           setloginkl(false);
       }
@@ -71,12 +39,18 @@ export default ( )=>{
       if(loginkl){
         return(
             <View style={styles.container}> 
-                <LinearGradient colors={['#38a98de6', '#38a98dcc', '#ffffffb3']} style={{flex:1, width:'100%', justifyContent: 'center', alignItems: 'center'}}>
-                <TouchableOpacity style={styles.imgbtn} onPress={Merronit}>
-                    <Image source={require("../../assets/img/kll.png")} style={{width:'55%', height:80, paddingBottom:30}}  />
-                </TouchableOpacity>
-                <View style={styles.int}>
-                <TextInput 
+                <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
+                        <Text style={styles.message}>Bem Vindo(a)</Text>
+                        <TouchableOpacity style={styles.containerLogo} onPress={Merronit}>
+                            <Image source={require("../../assets/img/kll.png")} style={{width:'80%'}} resizeMode="contain"
+                        animation="flipInY"/>
+                    </TouchableOpacity>
+                </Animatable.View>
+
+                <Animatable.View animation="fadeInUp" style={styles.containerForm}>
+                
+                <Text style={styles.title}>Login: </Text>
+                    <TextInput 
                     style={styles.input}
                     placeholder="Insira o Usuário"
                     dataCorrect={false}
@@ -84,7 +58,7 @@ export default ( )=>{
                     onChangeText={l=> setLogin(l)}
                     autoCapitalize='none'
                 ></TextInput>
-                
+                <Text style={styles.title}>Senha: </Text>
                 <TextInput style={styles.input}
                     placeholder="******"
                     secureTextEntry={true}
@@ -92,158 +66,171 @@ export default ( )=>{
                     value={senha}
                     onChangeText={(senha)=> setSenha(senha)}  
                 ></TextInput>
-            
-                 <TouchableOpacity style={styles.btn} onPress={logar}>
+
+                <TouchableOpacity style={styles.button} onPress={logar}>
                             {
                                 loadingAuth ? (
                                     <ActivityIndicator size="large" color="#fff" />
     
                                 ):( 
-                                    <Text style={styles.txt}>ENTRAR</Text>
+                                    <Text style={styles.buttontext} >ENTRAR</Text>
                                 )
                             }
                 </TouchableOpacity>
-                <View style={styles.check}>
-                    <Text style={styles.checktxt}>CHECKLIST</Text>
-                </View>
-                </View>  
-                </LinearGradient>
+
+                
+         
+
+                </Animatable.View>
+             
+                
             </View>
         );
       }
       return(
-          <View style={styles.containerMerronit}>
-                <LinearGradient colors={['#A52A2Ae6', '#FA8072cc', '#ffffffb3']} style={{flex:1, width:'100%', justifyContent: 'center', alignItems: 'center'}}>
-                    <TouchableOpacity style={styles.imgbtn} onPress={kl}>
-                        <Image source={require("../../assets/img/logo.png")} style={{width:'55%', height:80, paddingBottom:30, borderRadius:5}}  />
-                    </TouchableOpacity>
-                 
-                    <View style={styles.int}>
-                        <View style={styles.usuario}>
-                    </View>
-            <View style={styles.int}>
-            <TextInput 
-                style={styles.input}
-                placeholder="Insira o Usuário"
-                dataCorrect={false}
-                value={login}
-                onChangeText={(login)=> setLogin(login)}
-            ></TextInput>
-            <TextInput style={styles.input}
-                placeholder="Senha"
-                secureTextEntry={true}
-                dataCorrect={false}
-                value={senha}
-                onChangeText={(senha)=> setSenha(senha)}  
-            ></TextInput>
-             <TouchableOpacity style={styles.btnMerronit} onPress={logar}>
-                        {
-                            loadingAuth ? (
-                                <ActivityIndicator size="large" color="#fff" />
-                            ):( 
-                                <Text style={styles.txt}>ENTRAR</Text>
-                            )
-                        }
+        <View style={styles.containerMerronit}> 
+        <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
+                <Text style={styles.message}>Bem Vindo(a)</Text>
+                <TouchableOpacity style={styles.containerLogo} onPress={kl}>
+                    <Image source={require("../../assets/img/logo.png")} style={{width:'100%', borderRadius:2}} resizeMode="contain"
+                animation="flipInY"/>
             </TouchableOpacity>
-            <View style={styles.check}>
-                        <Text style={styles.checktxt}>CHECKLIST</Text>
-                    </View>
-       
-            </View>  
-            </View>  
-            </LinearGradient>
-          </View>
-      );
+        </Animatable.View>
 
+        <Animatable.View animation="fadeInUp" style={styles.containerForm}>
+        
+        <Text style={styles.title}>Login: </Text>
+            <TextInput 
+            style={styles.input}
+            placeholder="Insira o Usuário"
+            dataCorrect={false}
+            value={login}
+            onChangeText={l=> setLogin(l)}
+            autoCapitalize='none'
+        ></TextInput>
+        <Text style={styles.title}>Senha: </Text>
+        <TextInput style={styles.input}
+            placeholder="******"
+            secureTextEntry={true}
+            dataCorrect={false}
+            value={senha}
+            onChangeText={(senha)=> setSenha(senha)}  
+        ></TextInput>
+
+        <TouchableOpacity style={styles.buttonMerronit} onPress={logar}>
+                    {
+                        loadingAuth ? (
+                            <ActivityIndicator size="large" color="#fff" />
+
+                        ):( 
+                            <Text style={styles.buttontext} >ENTRAR</Text>
+                        )
+                    }
+        </TouchableOpacity>
+
+        
+ 
+
+        </Animatable.View>
+     
+        
+    </View>
+);
 }
 const styles = StyleSheet.create({
-    containerMerronit:{
-        flex:1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#FA8072'
-    },
-    imgbtn:{
-        width: '100%',
-        height:81,
-        alignItems: 'center'
-    
-    },
-    btnMerronit:{
-        width: '100%',
-        height: 50,
-        backgroundColor: '#A52A2A',
-        marginTop:17,
-        borderRadius:3,
-        justifyContent: 'center'
-
-    },
     container:{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#32CD32'
+        backgroundColor: '#38a98d'
     },
-    btnn:{
-        backgroundColor: '#fff'
+    containerMerronit:{
+        flex: 1,
+        backgroundColor: '#9c0a00'
     },
-    int:{
-        width: '85%',
-        alignItems: 'center',
-        paddingBottom: 20,
-        paddingTop:20,
-        borderRadius:10,
-        marginTop:10
-    
+    containerHeaderMerronit:{
+        marginTop: '14%',
+        marginBottom: '8%',
+        paddingStart: '5%'
+    },
+    containerHeader:{
+        marginTop: '14%',
+        marginBottom: '8%',
+        paddingStart: '5%'
+    },
+    messageMerronit:{
+        fontSize:28,
+        fontWeight: 'bold',
+        color: '#fff'
+    },
+    message:{
+        fontSize:28,
+        fontWeight: 'bold',
+        color: '#fff'
+    },
+    containerForm:{
+        backgroundColor: '#fff',
+        flex:1,
+        borderTopLeftRadius:25,
+        borderTopRightRadius:25,
+        paddingStart:'5%',
+        paddingEnd: '5%'
+    },
+    title:{
+        fontSize:20,
+        marginTop:28
     },
     input: {
-        backgroundColor: '#FFF',
-        marginBottom: 15,
-        fontSize: 17,
-        borderRadius: 7,
-        padding:10,
-        width: '75%',
         borderBottomWidth: 1,
-        borderBottomColor: '#DDD',
-        color: '#fff'
-    
-    },    
-    check:{
+        height:40,
+        marginBottom:12,
+        fontSize:16
+    },  
+    inputMerronit:{
+        borderBottomWidth: 1,
+        height:40,
+        marginBottom:12,
+        fontSize:16,
+        borderColor: '#fff'
+    },
+    button:{
+        backgroundColor: '#38a98d',
         width:'100%',
-        marginTop:20
+        borderRadius:4,
+        paddingVertical:8,
+        marginTop:14,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height:40
     },
-    checktxt:{
-        fontSize:50,
+    buttontext:{
         color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
+        fontSize:18,
+        fontWeight: 'bold'
     },
-    slide:{
-        width: '100%',
-        height:90,
-        backgroundColor: '#ccc',
-        justifyContent: 'space-between',
+    buttonMerronit:{
+        backgroundColor: '#9c0b01',
+        width:'100%',
+        borderRadius:4,
+        paddingVertical:8,
+        marginTop:14,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height:40
     },
-    input:{
-        borderBottomWidth:1,
-        borderBottomColor: '#fff',
-        width: '100%',
-        borderRadius:3,
-        color: '#fff'
+    containerLogo:{
+        height:100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:100
     },
-    btn:{
-        width: '100%',
-        height: 50,
-        backgroundColor: '#106852',
-        marginTop:17,
-        borderRadius:3,
-        justifyContent: 'center'
-
-    },
-    txt:{
-        textAlign: 'center',
-        fontSize:25,
-        fontWeight: 'bold',
-        color: '#fff'
+    containerLogoMerronit:{
+        height:100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:100
     }
+
+  
+    
+
+    
 })
