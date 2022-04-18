@@ -25,17 +25,13 @@ function Checklist({ route }) {
     const [antena, setAntena] = useState(false);
     const [manual, setManual] = useState(false);
     const [catalizador, setCatalizador] = useState(false);
+    const [ avarias ,setAvarias] = useState();
     
     const [listaFotos, setListaFotos] = useState([
         { title: 'frente', url: null },
         { title: 'lateralDireito',  url: null  },
         { title: 'traseira',  url: null  },
     ]);
-
-
-
-
-
 
 
 
@@ -78,6 +74,7 @@ function Checklist({ route }) {
 
 
     }
+
 
 
 
@@ -228,7 +225,11 @@ function Checklist({ route }) {
 
                 </View>
                 <View style={styles.avaria}>
-                    <TextInput placeholder="Pesquisar Avarias" />
+                    <TextInput placeholder="Pesquisar Avarias"
+                           value={avarias}
+                           onChangeText={l=> setAvarias(l)}
+                           onEndEditing={pesquisaAvarias}
+                    />
                 </View>
                 <View style={styles.fotos}>
                     <View style={styles.ft}>

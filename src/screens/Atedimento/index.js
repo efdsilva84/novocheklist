@@ -1,35 +1,54 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native';
 import { Picker } from '@react-native-picker/picker'
 import { UserContext } from '../../contexts/user';
 import { AuthContext } from '../../contexts/auth';
+import { SearchContext } from '../../contexts/search';
+import api from '../../services/api';
 export default function Atendimento({route}){
 
 
-    const { nome, user } = useContext(AuthContext)
-    const [procedimento, setProcedimento ] = useState(0);
+
+
+    const { nome, user } = useContext(AuthContext);
+    
+    const [procedencia, setprocedencia ] = useState(0);
+    const [ km_carro , setKm_carro] = useState();
     const [adesivo, setAdesivo ] = useState(0);
     const [ loadingAuth, setLoadingAuth] = useState(false);
+    const [ observacao , setObservacao ] = useState();
+    const [ loca, setLoca] = useState('');
+    const [ att, setAtt] = useState({});
 
+    const { dados } = useContext(SearchContext);
 
+    const id_usuario = 494;
+    const id_cliente = route.params.cliente;
+    const placa_car = route.params.pla;
 
     async function salvarAtendimento(){
+        if(km_carro){
+            alert("envio km")
+        }else{
+            alert("não envio");
+        }
         setLoadingAuth(true);
-        const config = {id_cliente, id_usuario, placa_car, km_carro, adesivo, procedencia, observacao, }
-        config={
-            params: config,
+         const dados = { id_usuario, placa_car, procedencia, adesivo, id_cliente}
+            const config ={
             headers: {
                 'Content-Type': 'application/json',
                Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
                 Accept: 'aplication/json'
             }
-
         }
-    
-
+        console.log(config);
+        const response = await api.post('checklist/salvar_atendimento', config);
+        console.log(response);
+       
+  
     }
-
-
+        
+  
     return(
         <ScrollView style={styles.container}>
                <View style={styles.atendimento}>
@@ -39,19 +58,24 @@ export default function Atendimento({route}){
                     </View>
                     <View style={styles.txt}>
                     <Text style={styles.txtcnh}>CNH: {route.params.cnh}</Text>
+                        <Text>novoID:{dados.id_Loc}</Text>
                         <Text style={styles.txtcnh}>Locação: {route.params.loca}</Text>
                         <Text style={styles.txtcnh}>ID: {route.params.cliente}</Text>
                         <Text>nome:{nome} email : {user.login}</Text>
                         <Text>status:{user.status}</Text>
+                       
+                        <Text>{route.params.cliente}</Text>
                     
-
+                        <Text>placa{route.params.pla}</Text>
+                        <Text>dados vindo:{dados.profissao_cli}</Text>
                     </View>
+                    
                    </View>  
 
                    <View style={styles.selecao}>
                        <Picker
-                        selectedValue={procedimento}
-                        onValueChange={(itemValue, itemIndex ) => setProcedimento(itemValue)}
+                        selectedValue={procedencia} 
+                        onValueChange={(itemValue, itemIndex ) => setprocedencia(itemValue)}
                        >
                            <Picker.Item key={0} value={"amortizacao"} label="Amortização" />
                            <Picker.Item key={1} value={"trocar_carro"} label="Trocar Carro" />
@@ -63,6 +87,7 @@ export default function Atendimento({route}){
 
                            
                        </Picker>
+                       <Text>{procedencia}</Text>
                        </View>    
                        <View style={styles.adesivo}>
                        <Picker
@@ -79,11 +104,17 @@ export default function Atendimento({route}){
                         </View>   
                         <View style={styles.kms}>
                         <TextInput editable={false} selectTextOnFocus={false} style={styles.inp} placeholder="ÚLTIMA KM" >{route.params.oleo}</TextInput>
-                        <TextInput style={styles.inp} placeholder="KM ATUAL" ></TextInput>
+                        <TextInput style={styles.inp} placeholder="KM ATUAL"
+                         value={km_carro}
+                         onChangeText={(km_carro)=> setKm_carro(km_carro)}  
+                        ></TextInput>
 
                             </View>  
                             <View style={styles.area}>
-                                <TextInput placeholder="Obervações"   multiline={true}   numberOfLines={8} />
+                                <TextInput placeholder="Obervações"    multiline={true}   numberOfLines={8}  
+                                        value={observacao}
+                                        onChangeText={(observacao)=> setObservacao(observacao)}  
+                                />
                                 </View> 
                                 <TouchableOpacity style={styles.salve} onPress={salvarAtendimento}>
                                 {
@@ -95,9 +126,11 @@ export default function Atendimento({route}){
                                 )
                             }
                                 </TouchableOpacity>
-                                
+
+                      
 
              </View>
+           
 
         </ScrollView>
      

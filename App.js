@@ -6,11 +6,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../list/src/screens/Login';
 import Home from '../list/src/screens/Home';
-import Atendimento from '../list/src/screens/Atedimento';
 import Camera from './src/screens/Camera';
 import Checklist from './src/screens/Checklist';
+import Atendimento from '../list/src/screens/Atedimento';
 import Preload from './src/screens/Preload';
 import AuthProvider from './src/contexts/auth';
+import SearchProvider from './src/contexts/search';
 const Stack = createNativeStackNavigator();
 
 
@@ -25,29 +26,24 @@ function HomeScreen() {
 function App() {
   return (
            <NavigationContainer>
-             <AuthProvider>
-             <StatusBar backgroundColor="#000" barStyle='light-content' />
-            <Stack.Navigator>
-            <Stack.Screen initialRouteName="Preload"   name="Preload" component={Preload} options={{headerShown:false}}/>
-          <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
-          
-
-          <Stack.Screen  name="Home" component={Home} options={{
-            headerStyle:{backgroundColor: '#38a98d'},headerTintColor: '#fff', title: 'Locação KL'
-          }}/>
-          <Stack.Screen  name="Atendimento" component={Atendimento} options={{
-            headerStyle:{backgroundColor: '#4169E1'}, headerTintColor: '#fff', title: 'Atendimento'
-          }} />
-
+             <SearchProvider>
+                <AuthProvider>
+                  <StatusBar backgroundColor="#000" barStyle='light-content' />
+                   <Stack.Navigator>
+                    <Stack.Screen initialRouteName="Preload"   name="Preload" component={Preload} options={{headerShown:false}}/>
+                      <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
+                    <Stack.Screen  name="Home" component={Home} options={{
+               headerStyle:{backgroundColor: '#38a98d'},headerTintColor: '#fff', title: 'Locação KL'
+             }}/>
+                   <Stack.Screen  name="Atendimento" component={Atendimento} options={{
+                headerStyle:{backgroundColor: '#4169E1'}, headerTintColor: '#fff', title: 'Atendimento'
+               }} />
+       
           <Stack.Screen name="Checklist" component={Checklist} />
           <Stack.Screen name="Camera" component={Camera} options={{headerShown:false}}  />
-
-
-
         </Stack.Navigator>
-
-   
         </AuthProvider>
+        </SearchProvider>
     </NavigationContainer>
    
   );

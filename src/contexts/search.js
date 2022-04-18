@@ -1,41 +1,49 @@
-import React,{ useContext, useState} from 'react';
-import { Children } from 'react/cjs/react.production.min';
-
+import React,{ createContext, useState} from 'react';
+import api from '../services/api';
+import { Keyboard } from 'react-native'
 
 export const SearchContext = createContext({});
 
+function SearchProvider({children}){
+    const [ dados, setDados ] = useState({});
+    const [ loadingAuth, setLoadingAuth] = useState(false);
 
-function searchProvider({children}){
-    const [ locacao, setLocacao ] = useState([]);
-
-
-    async function buscarLocacao(placa_car){
-        setLoadingAuth(true);
-        const placa = {placa_car}
-        config={
-            params:placa,
-            headers: {
-                'Content-Type': 'application/json',
-               Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
-                Accept: 'aplication/json'
+    async function buscando(placa_car){
+        if(placa_car == ''){
+            alert("Digite uma placa");
+            setPlaca_car('');
+            return;
+        }else{
+            const placa = {placa_car}
+            const config={
+                params:placa,
+                headers: {
+                    'Content-Type': 'application/json',
+                   Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
+                    Accept: 'aplication/json'
+                }
             }
+            try{
+                 const response = await api.get('checklist/pesquisar_locacao', config);
+                console.log(response.data);
 
+                
+                    setDados(response.data);
+                    return dados.json();
+                
+                     Keyboard.dismiss();
+            }catch(error){
+                console.log("ERROR: " + error)
+            }   
+ 
         }
-        const responde = await api.get('checklist/pesquisar_locacao', config);
-        setLoadingAuth(false);
-        
-        console.log(responde.data);
-        setLocacao(responde.data);
-
     }
-
-
     return(
-        <SearchContext.searchProvider value={{buscando}}>
+        <SearchContext.Provider value={{ buscando, dados}}>
             {children}
-        </SearchContext.searchProvider>
+        </SearchContext.Provider>
     );
 }
 
-export default searchProvider;
+export default SearchProvider;
 

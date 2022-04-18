@@ -14,12 +14,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
  
     function Atender(){
         navigation.navigate('Atendimento',{loca: data.id_Loc, nome: data.nome_cli, cnh: data.habilitacao_cli,
-            foto: data.foto, oleo: data.oleo_km_car, cliente: data.id_cli
+            foto: data.foto, oleo: data.oleo_km_car, cliente: data.id_cli, pla: data.placa_car
         });
     }
 
     function Retorno(){
-        navigation.navigate('Checklist',{loca: data.id_Loc, nome: data.nome_cli, oleo: data.oleo_km_car});
+        navigation.navigate('Checklist',{loca: data.id_Loc, nome: data.nome_cli, oleo: data.oleo_km_car, modelo: modelo_car});
     }
 
 
@@ -87,7 +87,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
                 <View style={styles.loja}>
                 
-                        
+                  
                     <Text style={styles.lojatxt}>LOJA: {data.titulo_loj}
 
                     
@@ -113,20 +113,20 @@ const styles = StyleSheet.create({
     },
     card:{
         flex:1,
-        width: '70%',
+        width: '100%',
         justifyContent: 'center',
         marginTop:10,
         //elevation:2,
         padding:5,
         borderRadius:5,
         borderWidth:0.5,
-        backgroundColor: '#FFF',
+        backgroundColor: '#fff',
     },
     alinhamento:{
         width:'100%',
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#FFF',
+        backgroundColor: '#eee',
 
 
     },

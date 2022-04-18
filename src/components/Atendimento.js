@@ -6,8 +6,8 @@ function Atendimento({data}) {
   
  return (
      <View>
-        <Text></Text>
-        <Locacoes />
+        <Text>Atendimento{data.id_loc}</Text>
+        
      </View>
   
   );

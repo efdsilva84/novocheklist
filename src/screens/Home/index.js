@@ -1,5 +1,5 @@
-import React,{useState, useEffect, useContext} from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Alert, ActivityIndicator, Image, FlatList} from 'react-native';
+import React,{useState, useEffect, useContext, useRef} from 'react';
+import { View, Text, ScrollView, StyleSheet, TextInput, Keyboard, TouchableOpacity, Alert, ActivityIndicator, Image, FlatList} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
@@ -7,17 +7,25 @@ import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
 import Locacoes from '../../components/Locacoes';
 import Atendimento from '../../components/Atendimento';
+import { SearchContext } from '../../contexts/search';
 
   
 //const api = 'https://klrentacar.com.br/sistema/api/';
 
 function Home({route}){
     const [ placa_car, setPlaca_car ] = useState('');
-    const [dados, setDados ] = useState();
     const [ loadingAuth, setLoadingAuth] = useState(false);
     const [ locacaoAberta, setLocacaoAberta ] = useState([]);
-    const [ locacao, setLocacao ] = useState([]);
+    const [ locacao, setLocacao ] = useState(null);
     const [loadingRefresh, setLoadingRefresh] = useState(false);
+    const inputRef = useState('');
+    const { buscando, dados } = useContext(SearchContext);
+
+
+    function limpar(){
+        setPlaca_car('');
+        inputRef.current.focus(null);
+    }
 
     useEffect(()=>{
         async function locacaoDia(){
@@ -51,39 +59,53 @@ function Home({route}){
         locacaoDia();
     }
 
-  
- 
-
-
-
- 
-
-    async function buscarLocacao({data}){
-        setLoadingAuth(true);
-        const placa = {placa_car}
-        config={
-            params:placa,
-            headers: {
-                'Content-Type': 'application/json',
-               Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
-                Accept: 'aplication/json'
-            }
-
-        }
-        const responde = await api.get('checklist/pesquisar_locacao', config);
+    async function buscarLocacao(){
+       setLoadingAuth(true);
+            buscando(placa_car);
         setLoadingAuth(false);
-        
-        console.log(responde.data);
-        setLocacao(responde.data);
 
+        
+
+
+        //buscando(placa_car);
     }
+
+    /*async function buscarLocacao({data}){
+        if(placa_car == ''){
+            alert("Digite uma placa");
+            setPlaca_car('');
+            return;
+        }else{
+            setLoadingAuth(true);
+            const placa = {placa_car}
+            const config={
+                params:placa,
+                headers: {
+                    'Content-Type': 'application/json',
+                   Authorization: 'Basic S2wgUmVudCBhIENhcmt1bjpEUUNhWXQyY1lYcWI2ZXM0',
+                    Accept: 'aplication/json'
+                }
+            }
+            try{
+                const response = await api.get('checklist/pesquisar_locacao', config);
+                setLoadingAuth(false);
+                console.log(response.data);
+                setLocacao(response.data);
+                Keyboard.dismiss();
+            }catch(error){
+                console.log("ERROR: " + error)
+            }   
+ 
+        }
+ 
+
+    }*/
 
 
 
 
 
     return(
-
         <View style={styles.container}>
                 <View style={styles.input}>
                 <TextInput 
@@ -92,8 +114,10 @@ function Home({route}){
                     dataCorrect={false}
                     value={placa_car}
                     onChangeText={(placa_car)=> setPlaca_car(placa_car)}
+                    ref={inputRef}
             ></TextInput>
-                         <TouchableOpacity style={styles.btn} onPress={buscarLocacao}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity style={styles.btn} onPress={buscarLocacao}>
                             {
                                 loadingAuth ? (
                                     <ActivityIndicator size="large" color="#fff" />
@@ -103,8 +127,19 @@ function Home({route}){
                                 )
                             }
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.btn} onPress={limpar}>
+                <Text style={styles.txt}>LIMPAR</Text>
+
+                </TouchableOpacity>
+            </View>
+    
         
                 <View>
+                <FlatList data={dados}
+                    renderItem={({item}) => <Locacoes data={item} />}  
+                    keyExtractor={item => item.id_Loc} 
+                    /> 
+
                     <FlatList data={locacaoAberta}
                         renderItem={({ item}) => <Locacoes data={item}/>} 
                         keyExtractor={item => item.id_Loc} refreshing={loadingRefresh}
@@ -112,10 +147,7 @@ function Home({route}){
                      
                 
 
-                     <FlatList data={locacao}
-                    renderItem={({item}) => <Locacoes data={item} />}  
-                    keyExtractor={item => item.id_Loc} 
-                    /> 
+              
                         
                     </View>
                             
@@ -124,7 +156,6 @@ function Home({route}){
        
                     </View>              
                  </View>
-
     );
 }
 const styles = StyleSheet.create({
@@ -148,19 +179,19 @@ const styles = StyleSheet.create({
     },
 
     btn:{
-        width: '100%',
+        width: '25%',
         height:50,
         borderRadius: 3,
         backgroundColor: '#38a98d',
         justifyContent: 'center',
-        marginTop:10
+        marginTop:10,
 
     },
     txt:{
         textAlign: 'center',
-        fontSize: 25,
+        fontSize: 19,
         color: '#fff',
-        fontWeight: 'bold'
+        
     },
     locacao:{
         width: '100%',
